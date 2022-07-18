@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset=" UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="생로병사"/>
+    <meta name="description" content="TrainingPlanWriteForm"/>
+    <title>책임GYM</title>
+
+
+</head>
+
+<body>
+
+<!-- Header -->
+<header th:replace="header.html :: header"></header>
+<!-- Close Header -->
+
+<!-- Modal -->
+
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" method="get" class="modal-content modal-body border-0 p-0">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                <button type="submit" class="input-group-text bg-success text-light">
+                    <i class="fa fa-fw fa-search text-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Start Categories of The Month -->
+<section class="section1 py-5">
+    <div class="container py-5">
+        <div class="row py-5">
+            <form class="col-md-9 m-auto" method="post">
+                <div class="row" th:if="${session.login eq null}">
+                    <div class="form-group col-md-6 mb-3">
+                        <label class="label1">아이디</label>
+                        <input type="text" class="form-control mt-1" id="id" name="memberId"
+                               placeholder="아이디를 입력해주세요">
+                        <label class="label1">비밀번호</label>
+                        <input type="password" class="form-control mt-1" id="password" name="memberPw"
+                               placeholder="비밀번호를 입력해주세요">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-end mt-2" th:if="${session.login eq null}">
+                        <button type="submit" formaction="memberSignIn" value="로그인" class="btn btn-success btn-lg px-3"
+                                style="width:108px;" id="login1" onclick="check_login()">로그인
+                        </button>
+                        <button type="submit" formaction="normalMemberRegistForm" class="btn btn-success btn-lg px-3"
+                                style="width:108px;">회원가입
+                        </button>
+                    </div>
+                    <div class="abc" th:if="${session.login ne null}"><h1 class="h1_1_1">안녕하세요,</h1>
+                        <h1 class="h1_1" th:if="${session.login != null}" th:text="${session.login.memberId}"></h1>
+                        <h1 class="h1_1_1">님</h1>
+                        <p class="p1_1">당신을 책임질, 책임GYM 입니다.</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</section>
+<!-- End Categories of The Month -->
+
+<!-- Start Banner Hero -->
+<div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="./assets/img/1.5.png">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left align-self-center">
+                            <h1 class="h1 text-success"><b>책임GYM</b></h1>
+                            <h3 class="h2"></h3>
+                            <p>
+                                About us
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="./assets/img/5.jpeg" style="height: 474px;">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left">
+                            <h1 class="h1 text-success">당신의 몸을 책임지겠습니다.</h1>
+                            <h3 class="h2" style="color: white">7월 여름 1+1 PT 이벤트 실시</h3>
+                            <p style="color: white">
+                                저희 책임짐은, 회원님의 원활한 운동을 위해 기구의 점검 및 방역에
+                                힘쓰고 있습니다.
+                                1:1 PT, 이용권, 시설 등 궁금하신 점이 있으시면 언제든지 문의주세요.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="./assets/img/6.jpeg" style="height: 474px;">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left">
+                            <h1 class="h1 text-success">더 섬세해진 기구로 운동을 시작하세요.</h1>
+                            <h3 class="h2" style="color: white">뉴텍 토쳐머신
+                                명품수입기구 완비 </h3>
+                            <p style="color: white">
+                                운동기구 대량입고, 어렵게 운동하시지마시고,
+                            </p>
+                            <p style="color: white">책임짐만의 운동기구로 쉽게 운동하세요.</p>
+                            <p style="color: white">회원님들의 몸을 책임지겠습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel"
+       role="button" data-bs-slide="prev">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel"
+       role="button" data-bs-slide="next">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+</div>
+<!-- End Banner Hero -->
+
+<!-- Start 운동 Product -->
+<section class="bg-light">
+    <div class="container py-5">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h1 style="color: white; font-weight: bold">오늘의 유튜브 추천 영상</h1>
+                <p style="color: ivory;">
+                    운동에 관한 전문적인 지식을 가지고 유튜브 채널을 운영하는 전, 현직 보디빌더들이
+                    운동 방법과 지식을 공유해드려요!
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="https://www.youtube.com/watch?v=E-9wNwkWSHk"
+                       onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+                        <img src="./assets/img/youtube1.jpg" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-muted fa fa-star"></i>
+                            </li>
+                            <li class="text-muted text-right">강경원</li>
+                        </ul>
+                        <h2 class="h2 text-decoration-none text-dark">"운동, 다이어트를 왜 그렇게?"</h2>
+                        <p class="card-text">
+                            이제 막 운동과 다이어트를 시작하려는 초심자에게 보디빌더 강경원이 말한다!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="https://www.youtube.com/watch?v=T2G1f-TlKVE"
+                       onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+                        <img src="./assets/img/youtube2.jpg" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                            </li>
+                            <li class="text-muted text-right">강경원</li>
+                        </ul>
+                        <h2 class="h2 text-decoration-none text-dark">"초급자? 중급자?"</h2>
+                        <p class="card-text">
+                            보디빌더 강경원이 초급자, 중급자, 상급자를 나누는 기준에 대해 말한다!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="https://www.youtube.com/watch?v=WuzNR-Go4Z0"
+                       onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+                        <img src="./assets/img/youtube3.jpg" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-muted fa fa-star"></i>
+                            </li>
+                            <li class="text-muted text-right">강경원</li>
+                        </ul>
+                        <h2 class="h2 text-decoration-none text-dark">"초급, 중급자는 이것만 하세요."</h2>
+                        <p class="card-text">
+                            강경원의 초급자와 중급자를 위한 추천 운동!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Featured Product -->
+
+<section class="bg-light1">
+    <div class="container py-5">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h1 style="color: white; font-weight: bold">닭가슴살 추천</h1>
+                <p style="color: ivory;">
+                    맛 없는 닭가슴살은 그만!, 이제는 웰빙 시대!
+                    맛있게 먹고, 재미있게 운동하세요!
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="shoppingView?productCode=PRO009"
+                       onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+                        <img src="./assets/img/닭가슴살세트.jpg" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-muted fa fa-star"></i>
+                            </li>
+                            <li class="text-muted text-right">스팀슬라이스 닭가슴살</li>
+                        </ul>
+                        <h2 class="h2 text-decoration-none text-dark">"퍽퍽한 닭가슴살은 그만!"</h2>
+                        <p class="card-text">
+                            부드럽고, 촉촉하게! 스팀 공법으로 수분증발을 막아 촉촉하고 부드러운 식감을 맛 보세요!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="shoppingView?productCode=PRO014"
+                       onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+                        <img src="./assets/img/프랑크소시지훈제맛.jpg" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                            </li>
+                            <li class="text-muted text-right">닭가슴살 소세지</li>
+                        </ul>
+                        <h2 class="h2 text-decoration-none text-dark">담백하게 즐기는 소세지</h2>
+                        <p class="card-text">
+                            꼬치형으로 간편하게! 풍성하게 터져 나오는 육즙! 풍미를 느껴보세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="shoppingView?productCode=PRO005"
+                       onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+                        <img src="./assets/img/닭가슴살불닭볶음밥.jpg" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                                <i class="text-warning fa fa-star"></i>
+                            </li>
+                            <li class="text-muted text-right">닭가슴살 볶음밥</li>
+                        </ul>
+                        <h2 class="h2 text-decoration-none text-dark">쉽고 간편한 한끼!</h2>
+                        <p class="card-text">
+                            스탠딩 파우치 형태로 제작! 간편하게 먹을 수 있어요!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Featured Product -->
+
+<!-- Start Footer -->
+<footer th:replace="footer.html :: footer"></footer>
+<!-- End Footer -->
+
+<!-- Start Script -->
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+
+<script>
+    $("#alert").click(function(){
+        alert('로그인 이후에 사용가능합니다.')
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+<script src="assets/js/jquery-1.11.0.min.js"></script>
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/templatemo.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="js/modal.js"></script>
+<!-- End Script -->
+</body>
+
+</html>

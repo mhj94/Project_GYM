@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="생로병사"/>
+    <meta name="description" content="해당 html에 대한 설명"/>
+    <title>타이틀</title>
+    <meta name="date" content="2022.05.25">
+    <title>책임짐 게시글 작성 페이지</title>
+</head>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<body>
+
+<!-- Header -->
+<header th:replace="header.html :: header"></header>
+<!-- Close Header -->
+<div class="boardViewContainer">
+    <div class="boardViewMain">
+        <div class="boardViewTableButton">
+            <div class="boardView">
+                <div class="viewTable_div">
+                    <table class="viewTable">
+                        <tr>
+                            <th>게시글 번호</th>
+                            <td th:text="${view.boardNo}"></td>
+                        </tr>
+                        <tr>
+                            <th>글머리</th>
+                            <td th:text="${view.boardType}"></td>
+                        </tr>
+                        <tr>
+                            <th>작성 날자</th>
+                            <td th:text="${view.boardDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>글제목</th>
+                            <td th:text="${view.boardTitle}"></td>
+                        </tr>
+                        <tr>
+                            <th>작성자</th>
+                            <td th:text="${view.boardWriter}"></td>
+                        </tr>
+                        <tr>
+                            <th>글내용</th>
+                            <td th:text="${view.boardContent}"></td>
+                        </tr>
+                        <tr>
+                            <th>조회수</th>
+                            <td th:text="${view.boardHits}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="viewTable_div2">
+                    <table class="viewTable2">
+                        <tr>
+                            <th>첨부이미지</th>
+                        </tr>
+                        <tr>
+                            <td><img th:src="@{uploadfile/{aa}(aa=${view.boardUploadFileName})}"
+                                     style="width:200px; height:175px;"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="boardViewButton">
+                <button class="btn btn-success btn-lg px-3"
+                        th:onclick="|location.href ='@{boardModifyForm(boardNo=${view.boardNo})}'|">수정
+                </button>
+                <button class="btn btn-success btn-lg px-3"
+                        th:onclick="|location.href ='@{boardDelete(boardNo=${view.boardNo})}'|">삭제
+                </button>
+                <button class="btn btn-success btn-lg px-3" onclick="location.href = document.referrer;">뒤로가기</button>
+            </div>
+        </div>
+        <div class="comment_div">
+            <div class="comment" id="commentArea"></div>
+            <div class="comment_div2">
+                <table class="viewTable4">
+                    <tr>
+                        <td><textarea rows=1 cols=30 id="boardCommentsContent"
+                                      placeholder="댓글을 작성해주세요."></textarea>
+                        </td>
+                        <td>
+                            <button class="btn2" id="boardCommentsBtn">등록</button>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <input type="hidden" th:id="memberId" th:value="${session.login.memberId}">
+        <input type="hidden" th:id="boardNo" th:value="${view.boardNo}">
+    </div>
+</div>
+<!-- Start Footer -->
+<footer th:replace="footer.html :: footer"></footer>
+<!-- End Footer -->
+</body>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+<script th:inline="javascript">
+
+    var boardNo = [[${view.boardNo}]];
+
+    function boardCommentList(list) {
+
+        var output = "";
+        var loginId = [[${session.login.memberId}]];
+
+        output += "<table class='viewTable3'>";
+        output += "<tr>";
+        output += "<th class='comment_th'>번호</th>"
+        output += "<th class='comment_th'>작성자</th>";
+        output += "<th class='comment_th'>내용</th>";
+        output += "<th class='comment_th'>작성일</th>";
+        output += "</tr>";
+
+        for (var i in list) {
+            output += "<tr>";
+            output += "<td>" + list[i].boardCommentsNo + "</td>";
+            output += "<td>" + list[i].boardCommentsWriter + "</td>";
+            output += "<td>" + list[i].boardCommentsContent + "</td>";
+            output += "<td>" + list[i].boardCommentsDate + "</td>";
+
+            if (list[i].boardCommentsWriter == loginId) {
+
+                output += "<td><button class=\"btn1\" onclick=boardCommentsModify(" + list[i].boardCommentsNo + ",'" + list[i].boardNo + "')>수정</button></td>";
+            }
+
+            // 작성자와 로그인한 아이디가 같거나 관리자일 경우에만 삭제 가능
+            if (list[i].boardCommentsWriter == loginId || loginId == 'admin') {
+
+                output += "<td><button class=\"btn1\" onclick=boardCommentsDelete(" + list[i].boardCommentsNo + ",'" + list[i].boardNo + "')>삭제</button></td>";
+            }
+
+            output += "</tr>";
+        }
+
+        output += "</table>";
+
+        // div 영역 commentArea
+        var commentArea = document.getElementById("commentArea");
+
+        // commentArea에 output 내용 넣기
+        commentArea.innerHTML = output;
+
+    }
+
+    $(document).ready(function () {
+
+        // 리뷰 목록
+        $.ajax({
+            type    : "POST",
+            url     : "boardComments/boardCommentsList",
+            data    : {"boardNo": boardNo},
+            dataType: "json",
+            success : function (list) {
+                boardCommentList(list);
+            },
+            error   : function (request, status, error) {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    });
+
+    // 버튼 클릭 시
+    $('#boardCommentsBtn').click(function () {
+        var loginId = $("#memberId").val();
+        console.log(loginId);
+        if (!loginId) {
+            alert('로그인 이후 사용할 수 있습니다.');
+            location.href = "index";
+        } else {
+            var boardCommentsWriter = loginId;
+            var boardNo = document.getElementById("boardNo").value;
+            var boardCommentsContent = $('#boardCommentsContent').val();
+
+            $.ajax({
+                type    : "POST",
+                url     : "boardComments/boardCommentsRegist",
+                data    : {
+                    "boardCommentsWriter" : boardCommentsWriter,
+                    "boardNo"             : boardNo,
+                    "boardCommentsContent": boardCommentsContent
+                },
+                dataType: "json",
+                success : function (list) {
+                    boardCommentList(list);
+                    $('#boardCommentsContent').val("");
+                    reload();
+                },
+                error   : function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        }
+    });
+
+
+    // 리뷰 삭제
+    function boardCommentsDelete(boardCommentsNo, boardNo) {
+        var check = confirm('댓글을 삭제하시겠습니까?');
+        var boardNo = [[${view.boardNo}]];
+
+        if (check) {
+            $.ajax({
+                type    : "POST",
+                url     : "boardComments/boardCommentsDelete",
+                data    : {"boardCommentsNo": boardCommentsNo, "boardNo": boardNo},
+                dataType: "json",
+                success : function (list) {
+                    boardCommentList(list);
+                    reload();
+                },
+                error   : function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        }
+    }
+
+    // 리뷰 수정
+    function boardCommentsModify(boardCommentsNo, boardNo) {
+        var check = confirm('댓글을 수정하시겠습니까?');
+        var boardCommentsContent = $('#boardCommentsContent').val();
+        var boardNo = [[${view.boardNo}]];
+
+        if (check) {
+            $.ajax({
+                type    : "POST",
+                url     : "boardComments/boardCommentsModify",
+                data    : {
+                    "boardCommentsNo"     : boardCommentsNo,
+                    "boardNo"             : boardNo,
+                    "boardCommentsContent": boardCommentsContent
+
+                },
+                dataType: "json",
+                success : function (list) {
+                    boardCommentList(list);
+                    reload();
+                },
+                error   : function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        }
+    }
+
+    function reload() {
+        history.go(0);
+    }
+</script>
+</html>
